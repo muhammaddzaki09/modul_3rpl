@@ -7,22 +7,19 @@ def test_hash_password_konsisten():
     hash_1 = UserModel.hash_password(password_asli)
     hash_2 = UserModel.hash_password(password_asli)
 
-    # Memastikan hasil hash TIDAK SAMA dengan plaintext asli
     assert hash_1 != password_asli
     assert hash_1 == hash_2
-    assert len(hash_1) == 64  # Panjang karakter standar SHA-256
+    assert len(hash_1) == 64
 
 
 @patch("config.database.Database.get_connection")
 def test_autentikasi_pengguna_berhasil(mock_get_conn):
-    # Mock koneksi database agar tidak memicu error koneksi MySQL di server CI
     mock_conn = MagicMock()
     mock_get_conn.return_value = mock_conn
 
     model = UserModel()
     mock_cursor = MagicMock()
 
-    # Simulasi kembalian data dari database ketika username & password cocok
     mock_cursor.fetchone.return_value = {
         "id_user": 1,
         "username": "petugas",
