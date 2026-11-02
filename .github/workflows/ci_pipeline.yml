@@ -28,4 +28,4 @@ jobs:
 
       - name: 4. Menjalankan Automated Unit Testing (Pytest)
         run: |
-          PYTHONPATH=. xvfb-run python -m pytest -v
+          PYTHONPATH=. xvfb-run python -m pytest tests/ -v
