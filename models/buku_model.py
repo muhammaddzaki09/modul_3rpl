@@ -43,12 +43,22 @@ class BukuModel:
 
     # === DELETE ===
     def delete_buku(self, id_buku):
-        if self.conn:
+        if not self.conn:
+            return False
+        
+        cursor = None
+        try:
             cursor = self.conn.cursor()
             query = f"DELETE FROM {self.table_name} WHERE id_buku = %s"
-            val = (id_buku,)
+            val = (int(id_buku),)
             cursor.execute(query, val)
             self.conn.commit()
-            cursor.close()
             return True
-        return False
+        except Exception as e:
+            print(f"Error Delete: {e}")
+            if self.conn:
+                self.conn.rollback()  # Batalkan transaksi jika gagal agar tidak terkunci
+            return False
+        finally:
+            if cursor:
+                cursor.close()
